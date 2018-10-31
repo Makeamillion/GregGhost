@@ -22,7 +22,7 @@ class DB {
         $query = 'SELECT * FROM user ORDER BY id DESC';
         return $this->conn->query($query)->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Получить пользователя по логину
     public function getUserByLogin($login) {
         $sql = 'SELECT * FROM user WHERE login = :login ORDER BY id DESC LIMIT 1';
         $stm = $this->conn->prepare($sql);
@@ -30,7 +30,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+    // Получить пользователя по токену
     public function getUserByToken($token) {
         $sql = 'SELECT * FROM user WHERE token = :token ORDER BY id DESC LIMIT 1';
         $stm = $this->conn->prepare($sql);
@@ -38,7 +38,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+    // Получить пользователя
     public function getUser($login, $password) {
         $sql = 'SELECT * FROM user WHERE login = :login and password = :password ORDER BY id DESC LIMIT 1';
         $stm = $this->conn->prepare($sql);
@@ -47,7 +47,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+     // Обновить токен пользователя
     public function updateUserToken($id, $token) {
         $token = bin2hex(random_bytes(32));
 
@@ -57,7 +57,7 @@ class DB {
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->fetchObject('stdClass');
     }
-
+    // Создать пользователя
     public function createUser($options) {
         $name = $options['name'];
         $login = $options['login'];
@@ -76,11 +76,12 @@ class DB {
 
 
     /*Snake*/
+    // Получить удава
     public function getSnakes() {
         $query = 'SELECT * FROM snake';
         return $this->conn->query($query)->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Получить удава пользователя
     public function getUserSnakes($user_id) {
         $sql = 'SELECT * FROM snake, user WHERE user.id = :user_id AND snake.user_id=user.id ORDER BY snake.id DESC';
         $stm = $this->conn->prepare($sql);
@@ -88,7 +89,7 @@ class DB {
         $stm->execute();
         return $stm->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Получить змею по id
     public function getSnakeById($id) {
         $sql = 'SELECT * FROM snake WHERE id = :id';
         $stm = $this->conn->prepare($sql);
@@ -96,7 +97,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+    // Создать змею
     public function createSnake($options) {
         $user_id = $options['user_id'];
         $direction = $options['direction'];
@@ -107,14 +108,14 @@ class DB {
         $stmt->bindParam(':direction', $direction, PDO::PARAM_STR);
         return $stmt->execute();
     }
-
+    // Удалить змею
     public function deleteSnake($id) {
         $sql = "DELETE FROM snake WHERE id =  :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
-
+    // Удалить змею пользователя
     public function deleteUserSnakes($user_id) {
         $sql = "DELETE FROM snake WHERE user_id =  :user_id";
         $stmt = $this->conn->prepare($sql);
@@ -123,6 +124,7 @@ class DB {
     }
 
     /*Snake_body*/
+    // Получить тело змеи
     public function getSnakeBody($id) {
         $sql = 'SELECT * FROM snake_body WHERE snake_id = :id';
         $stm = $this->conn->prepare($sql);
@@ -130,7 +132,7 @@ class DB {
         $stm->execute();
         return $stm->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Создать тело змеи
     public function createSnakeBody($options) {
         $snake_id = $options['snake_id'];
         $x = $options['x'];
@@ -143,14 +145,14 @@ class DB {
         $stmt->bindParam(':y', $y, PDO::PARAM_INT);
         return $stmt->execute();
     }
-
+    // Удалить тело змеи
     public function deleteSnakeBody($id) {
         $sql = "DELETE FROM snake_body WHERE id =  :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
-
+    // Удалить часть тела змеи
     public function deleteSnakeBodyFromSnake($id) {
         $sql = "DELETE FROM snake_body WHERE snake_id =  :id";
         $stmt = $this->conn->prepare($sql);
@@ -162,11 +164,12 @@ class DB {
 
 
     /*Food*/
+    // Получить еду
     public function getFoods() {
         $query = 'SELECT * FROM food';
         return $this->conn->query($query)->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Удалить еду
     public function deleteFood($id) {
         $sql = "DELETE FROM food WHERE id =  :id";
         $stmt = $this->conn->prepare($sql);
@@ -184,7 +187,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+    // Создать систему
     public function createSystem($name, $value) {
         $stmt = $this->conn->prepare("INSERT INTO system (name, value) VALUES (:name, :value)");
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
@@ -193,12 +196,12 @@ class DB {
     }
 
     /*Map*/
-
+    // Получить карту
     public function getMaps() {
         $query = 'SELECT * FROM map';
         return $this->conn->query($query)->fetchAll(PDO::FETCH_CLASS);
     }
-
+    // Получить карту по Id
     public function getMapById($id) {
         $sql = 'SELECT * FROM map WHERE id = :id';
         $stm = $this->conn->prepare($sql);
@@ -206,7 +209,7 @@ class DB {
         $stm->execute();
         return $stm->fetchObject('stdClass');
     }
-
+    // Создать карту
     public function createMap($options) {
         $width = $options['width'];
         $height = $options['height'];
